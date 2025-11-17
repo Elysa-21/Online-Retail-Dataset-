@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib
-matplotlib.use('TkAgg')  # untuk menampilkan grafik di layar
+matplotlib.use('Agg')  # untuk menampilkan grafik di layar
 import matplotlib.pyplot as plt
 import seaborn as sns
 
