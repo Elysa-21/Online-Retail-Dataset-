@@ -4,6 +4,59 @@ matplotlib.use('Agg')  # untuk menampilkan grafik di layar
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+def load_and_clean_with_stats(filepath):
+    """
+    Load raw data, perform initial exploration, clean data, and show post-cleaning stats.
+    Returns cleaned DataFrame.
+    """
+    # ============================================
+    # 1. LOAD RAW DATA (SEBELUM CLEANING)
+    #============================================
+
+    print("\n1. LOADING RAW DATA...")
+    raw_df = pd.read_csv(filepath, encoding='ISO-8859-1')
+
+    print("\n=== DATA SEBELUM CLEANING ===")
+    print("Jumlah baris:", len(raw_df))
+    print("Jumlah kolom:", len(raw_df.columns))
+    print("\nMissing values:")
+    print(raw_df.isnull().sum())
+
+    print("\nJumlah duplikasi:", raw_df.duplicated().sum())
+
+    print("\nStatistik deskriptif awal:")
+    print(raw_df.describe())
+
+    # Visualize before cleaning
+    visualize_before_cleaning(raw_df)
+
+    # ============================================
+    # 2. CLEANING DATA
+    #============================================
+
+    print("\n2. CLEANING DATA MENGGUNAKAN FUNCTION load_and_clean_data()...")
+    df = load_and_clean_data(filepath)
+    df = df.reset_index(drop=True)
+
+    print("\n=== DATA SETELAH CLEANING ===")
+    print("Jumlah baris:", len(df))
+    print("Jumlah kolom:", len(df.columns))
+    print("\nMissing values setelah cleaning:")
+    print(df.isnull().sum())
+
+    print("\nJumlah duplikasi setelah cleaning:", df.duplicated().sum())
+
+    print("\nStatistik deskriptif setelah cleaning:")
+    print(df.describe())
+
+    # Visualize after cleaning
+    visualize_after_cleaning(df)
+
+    print("\n🟢 Data Cleaning selesai.")
+    print("==========================================\n")
+
+    return df
+
 def load_and_clean_data(filepath):
     """
     Load dataset and perform data cleaning.
@@ -11,9 +64,6 @@ def load_and_clean_data(filepath):
     """
     df = pd.read_csv(filepath)
     print("Data awal:", df.shape)
-
-    # Visualize before cleaning
-    visualize_before_cleaning(df)
 
     # Hapus duplikasi
     df = df.drop_duplicates()
@@ -31,9 +81,6 @@ def load_and_clean_data(filepath):
     df["TotalPrice"] = df["Quantity"] * df["Price"]
 
     print("Data setelah cleaning:", df.shape)
-
-    # Visualize after cleaning
-    visualize_after_cleaning(df)
 
     return df
 
@@ -72,7 +119,7 @@ def visualize_before_cleaning(df):
     axes[1, 2].set_title('TotalPrice Box Plot')
 
     plt.tight_layout()
-    plt.savefig('data/before_cleaning.png')
+    plt.savefig('output/cleaning/before_cleaning.png')
     plt.close()
 
 def visualize_after_cleaning(df):
@@ -103,5 +150,5 @@ def visualize_after_cleaning(df):
     axes[1, 2].set_title('TotalPrice Box Plot')
 
     plt.tight_layout()
-    plt.savefig('data/after_cleaning.png')
+    plt.savefig('output/cleaning/after_cleaning.png')
     plt.close()
